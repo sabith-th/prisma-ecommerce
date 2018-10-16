@@ -14,4 +14,15 @@ type User {
   password: String!
   name: String!
   posts: [Post!]!
+  products: [Product!]!
+}
+
+type Product {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  pictureUrl: String!
+  price: Float!
+  seller: User!
 }
