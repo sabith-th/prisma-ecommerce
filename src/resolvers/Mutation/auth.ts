@@ -1,6 +1,5 @@
 import * as bcrypt from "bcryptjs";
-import * as jwt from "jsonwebtoken";
-import { Context } from "../../utils";
+import { Context, createToken, getUserId } from "../../utils";
 
 export const auth = {
   async signup(parent, args, ctx: Context, info) {
@@ -10,7 +9,7 @@ export const auth = {
     });
 
     return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+      token: createToken(user.id),
       user
     };
   },
@@ -38,9 +37,14 @@ export const auth = {
 
     return {
       payload: {
-        token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+        token: createToken(user.id),
         user
       }
     };
+  },
+
+  refreshToken(parent, { token }, ctx: Context, info) {
+    const userId = getUserId(ctx, token);
+    return createToken(userId);
   }
 };
