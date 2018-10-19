@@ -6,21 +6,15 @@ export interface Context {
   request: any;
 }
 
-export function getUserId(ctx: Context, jwtToken?: string) {
-  let token = "";
-  if (jwtToken) {
-    token = jwtToken;
-  } else {
-    const Authorization = ctx.request.get("Authorization");
-    token = Authorization.replace("Bearer ", "");
-  }
-  if (token) {
+export function getUserId(ctx: Context) {
+  const Authorization = ctx.request.get("Authorization");
+  if (Authorization) {
+    const token = Authorization.replace("Bearer ", "");
     const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
       userId: string;
     };
     return userId;
   }
-
   throw new AuthError();
 }
 

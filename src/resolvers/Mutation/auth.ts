@@ -43,8 +43,8 @@ export const auth = {
     };
   },
 
-  refreshToken(parent, { token }, ctx: Context, info) {
-    const userId = getUserId(ctx, token);
+  refreshToken(parent, args, ctx: Context, info) {
+    const userId = getUserId(ctx);
     return createToken(userId);
   }
 };
