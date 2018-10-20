@@ -45,6 +45,9 @@ export const auth = {
 
   refreshToken(parent, args, ctx: Context, info) {
     const userId = getUserId(ctx);
-    return createToken(userId);
+    return {
+      token: createToken(userId),
+      userId
+    }
   }
 };

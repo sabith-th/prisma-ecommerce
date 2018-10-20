@@ -21,11 +21,16 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): LoginResponse!
-  refreshToken: String!
+  refreshToken: RefreshTokenPayload!
   createProduct(name: String!, price: Float!, picture: Upload): Product!
   createDraft(title: String!, text: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
+}
+
+type RefreshTokenPayload {
+  token: String!
+  userId: String!
 }
 
 type Subscription {
