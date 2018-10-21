@@ -20,6 +20,12 @@ const processUpload = async upload => {
   return path;
 };
 
+interface ProductData {
+  name?: string;
+  price?: number;
+  pictureUrl?: string;
+}
+
 export const product = {
   async createProduct(parent, { name, price, picture }, ctx: Context, info) {
     const userId = getUserId(ctx);
@@ -45,23 +51,28 @@ export const product = {
     info
   ) {
     const userId = getUserId(ctx);
-    const product = await ctx.db.query.product({ where: { id } });
+    const product = await ctx.db.query.product(
+      { where: { id } },
+      `{seller { id }}`
+    );
     if (userId !== product.seller.id) {
       throw new Error("Not authorized");
     }
 
-    let pictureUrl = null;
+    const data: ProductData = {};
+    if (name) {
+      data.name = name;
+    }
+    if (price) {
+      data.price = price;
+    }
     if (picture) {
-      pictureUrl = await processUpload(picture);
+      data.pictureUrl = await processUpload(picture);
     }
 
     return ctx.db.mutation.updateProduct(
       {
-        data: {
-          name,
-          price,
-          pictureUrl
-        },
+        data,
         where: {
           id
         }
