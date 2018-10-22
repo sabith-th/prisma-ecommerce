@@ -1,4 +1,4 @@
-import { Context } from '../utils'
+import { Context } from "../utils";
 
 export const Subscription = {
   feedSubscription: {
@@ -7,12 +7,24 @@ export const Subscription = {
         {
           where: {
             node: {
-              isPublished: true,
-            },
-          },
+              isPublished: true
+            }
+          }
         },
-        info,
-      )
-    },
+        info
+      );
+    }
   },
-}
+  product: {
+    subscribe: (parent, args, ctx: Context, info) => {
+      return ctx.db.subscription.product(
+        {
+          where: {
+            mutation_in: "UPDATED"
+          }
+        },
+        info
+      );
+    }
+  }
+};
